@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SportsLiveScoreboard.Data.Migrations
 {
-    [DbContext(typeof(SportDbContext))]
+    [DbContext(typeof(SportsDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

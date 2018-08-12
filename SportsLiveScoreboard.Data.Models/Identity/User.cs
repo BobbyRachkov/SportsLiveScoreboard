@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace SportsLiveScoreboard.Data.Models.Identity
 {
@@ -8,5 +9,7 @@ namespace SportsLiveScoreboard.Data.Models.Identity
         {
             
         }
+
+        public List<Event> Events { get; set; }
     }
 }

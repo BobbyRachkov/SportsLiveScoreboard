@@ -33,11 +33,11 @@ namespace SportsLiveScoreboard.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<SportDbContext>(options =>
+            services.AddDbContext<SportsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, Role>(options =>
-                {
+                { 
                     options.User.RequireUniqueEmail = true;
                     options.SignIn.RequireConfirmedEmail = true;
 
@@ -48,9 +48,10 @@ namespace SportsLiveScoreboard.Web
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<SportDbContext>()
+                .AddEntityFrameworkStores<SportsDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Identity/Account/LogIn");
 
             services.RegisterServicesFromModule<ServicesModule>();
 

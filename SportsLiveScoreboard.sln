@@ -7,19 +7,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{744AF41D-D19
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5C990372-7E11-4C3A-9F50-3CE7774D2D20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Web", "SportsLiveScoreboard.Web\SportsLiveScoreboard.Web.csproj", "{E8C3F724-55FA-415B-BDB0-87870BA76A11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Web", "SportsLiveScoreboard.Web\SportsLiveScoreboard.Web.csproj", "{E8C3F724-55FA-415B-BDB0-87870BA76A11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Data", "SportsLiveScoreboard.Data\SportsLiveScoreboard.Data.csproj", "{8A335D18-A62B-4E22-9CE9-659EA2D12491}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Data", "SportsLiveScoreboard.Data\SportsLiveScoreboard.Data.csproj", "{8A335D18-A62B-4E22-9CE9-659EA2D12491}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Data.Models", "SportsLiveScoreboard.Data.Models\SportsLiveScoreboard.Data.Models.csproj", "{90182DC2-082A-410E-B697-96648E2374E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Data.Models", "SportsLiveScoreboard.Data.Models\SportsLiveScoreboard.Data.Models.csproj", "{90182DC2-082A-410E-B697-96648E2374E4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3A280A51-1904-45D7-AB47-1A3FA3D52FD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Services.Communication", "SportsLiveScoreboard.Services.Communication\SportsLiveScoreboard.Services.Communication.csproj", "{C3A2916D-8EEF-4687-A416-6D2E80274867}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Services.Communication", "SportsLiveScoreboard.Services.Communication\SportsLiveScoreboard.Services.Communication.csproj", "{C3A2916D-8EEF-4687-A416-6D2E80274867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Web.Extensions", "SportsLiveScoreboard.Web.Extensions\SportsLiveScoreboard.Web.Extensions.csproj", "{FFC865F8-F50D-4819-BD92-3E09C5E108CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Web.Extensions", "SportsLiveScoreboard.Web.Extensions\SportsLiveScoreboard.Web.Extensions.csproj", "{FFC865F8-F50D-4819-BD92-3E09C5E108CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Web.Utilities", "SportsLiveScoreboard.Web.Utilities\SportsLiveScoreboard.Web.Utilities.csproj", "{B586B44C-1BA9-45A0-AB41-21C888197490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Web.Utilities", "SportsLiveScoreboard.Web.Utilities\SportsLiveScoreboard.Web.Utilities.csproj", "{B586B44C-1BA9-45A0-AB41-21C888197490}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsLiveScoreboard.Services.Data", "SportsLiveScoreboard.Services.Data\SportsLiveScoreboard.Services.Data.csproj", "{A56E2754-B866-4A30-9E55-FD23ED521D0F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{D304887C-072B-436B-BC34-18F73A2B8A9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsLiveScoreboard.Extensions", "SportsLiveScoreboard.Extensions\SportsLiveScoreboard.Extensions.csproj", "{1D41989C-BD4A-4401-AF29-130D7C3CB7C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +57,14 @@ Global
 		{B586B44C-1BA9-45A0-AB41-21C888197490}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B586B44C-1BA9-45A0-AB41-21C888197490}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B586B44C-1BA9-45A0-AB41-21C888197490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A56E2754-B866-4A30-9E55-FD23ED521D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A56E2754-B866-4A30-9E55-FD23ED521D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A56E2754-B866-4A30-9E55-FD23ED521D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A56E2754-B866-4A30-9E55-FD23ED521D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D41989C-BD4A-4401-AF29-130D7C3CB7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D41989C-BD4A-4401-AF29-130D7C3CB7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D41989C-BD4A-4401-AF29-130D7C3CB7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D41989C-BD4A-4401-AF29-130D7C3CB7C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +76,8 @@ Global
 		{C3A2916D-8EEF-4687-A416-6D2E80274867} = {3A280A51-1904-45D7-AB47-1A3FA3D52FD5}
 		{FFC865F8-F50D-4819-BD92-3E09C5E108CD} = {744AF41D-D193-430B-BD05-0EE4120329C9}
 		{B586B44C-1BA9-45A0-AB41-21C888197490} = {744AF41D-D193-430B-BD05-0EE4120329C9}
+		{A56E2754-B866-4A30-9E55-FD23ED521D0F} = {3A280A51-1904-45D7-AB47-1A3FA3D52FD5}
+		{1D41989C-BD4A-4401-AF29-130D7C3CB7C6} = {D304887C-072B-436B-BC34-18F73A2B8A9D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DAA5998E-3F90-42E9-AC04-21B485B21D86}

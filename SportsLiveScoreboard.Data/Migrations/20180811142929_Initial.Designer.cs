@@ -9,7 +9,7 @@ using SportsLiveScoreboard.Data;
 
 namespace SportsLiveScoreboard.Data.Migrations
 {
-    [DbContext(typeof(SportDbContext))]
+    [DbContext(typeof(SportsDbContext))]
     [Migration("20180811142929_Initial")]
     partial class Initial
     {
