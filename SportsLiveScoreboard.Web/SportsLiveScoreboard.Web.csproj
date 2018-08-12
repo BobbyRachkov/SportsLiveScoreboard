@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>aspnet-SportsLiveScoreboard.Web-33D7419E-C8E2-4EF2-B654-68FFD8D41D7E</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SportsLiveScoreboard.Data.Models\SportsLiveScoreboard.Data.Models.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Data\SportsLiveScoreboard.Data.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Services.Communication\SportsLiveScoreboard.Services.Communication.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Web.Extensions\SportsLiveScoreboard.Web.Extensions.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Web.Utilities\SportsLiveScoreboard.Web.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Identity\Pages\Account\Manage\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+</Project>

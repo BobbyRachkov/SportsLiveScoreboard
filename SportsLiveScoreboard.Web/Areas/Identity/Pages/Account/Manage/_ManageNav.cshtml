@@ -1,0 +1,36 @@
+﻿@inject SignInManager<User> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<div class="list-group">
+    <a asp-page="./Index" class="list-group-item list-group-item-action flex-column align-items-start @ManageNavPages.IndexNavClass(ViewContext)">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Profile</h5>
+        </div>
+    </a>
+    <a id="change-password" asp-page="./ChangePassword" class="list-group-item list-group-item-action flex-column align-items-start @ManageNavPages.ChangePasswordNavClass(ViewContext)">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Password</h5>
+        </div>
+    </a>
+    @if (hasExternalLogins)
+    {
+        <a id="external-login" asp-page="./ExternalLogins" class="list-group-item list-group-item-action flex-column align-items-start @ManageNavPages.ExternalLoginsNavClass(ViewContext)">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">External logins</h5>
+            </div>
+        </a>
+    }
+    <a asp-page="./TwoFactorAuthentication" class="list-group-item list-group-item-action flex-column align-items-start @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Two-factor authentication</h5>
+        </div>
+    </a>
+
+    <a asp-page="./PersonalData" class="list-group-item list-group-item-action flex-column align-items-start @ManageNavPages.PersonalDataNavClass(ViewContext)">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Personal data</h5>
+        </div>
+    </a>
+</div>
+<br />
