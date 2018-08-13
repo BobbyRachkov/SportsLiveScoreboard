@@ -10,5 +10,20 @@ namespace SportsLiveScoreboard.Extensions
             obj = new T();
             return obj;
         }
+
+        public static Lazy<TInterface> InitLazy<TInterface, TImplementation>(this Lazy<TInterface> lazy,
+            TImplementation obj)
+            where TImplementation : TInterface
+        {
+            lazy = new Lazy<TInterface>(() => obj);
+            return lazy;
+        }
+
+        public static Lazy<TInterface> InitLazy<TInterface, TImplementation>(this Lazy<TInterface> lazy)
+            where TImplementation : TInterface
+        {
+            lazy = new Lazy<TInterface>();
+            return lazy;
+        }
     }
 }

@@ -23,3 +23,10 @@ body {
         display: none;
     }
 }
+
+.cursor-default {
+    cursor: default;
+}
+.cursor-pointer {
+    cursor: pointer;
+}

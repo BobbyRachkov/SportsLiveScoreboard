@@ -4,5 +4,57 @@
     ViewData["Title"] = "EventSearch";
 }
 
-<h2>EventSearch</h2>
+@section Stylesheets
+{
+    <style>
+        body {
+            min-height: 100vh;
+            background-image: url(/images/background.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
 
+        #find-event { text-shadow: 2px 2px 15px black; }
+        #code {
+            font-size: 18px;
+        }
+    </style>
+}
+
+
+<div class="row" style="margin-top: 25vh;">
+    <div class="d-none d-md-block col-md-4"></div>
+    <div class="text-center col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <h2 id="find-event" class="control-label text-dark">Find Event</h2>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Event #</span>
+                        </div>
+                        <input asp-for="EventCode" class="form-control form-control-lg" aria-label="Event number">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@if (Model.Exists.HasValue && !Model.Exists.Value)
+{
+    <div class="row">
+        <div class="d-none d-md-block col-md-3"></div>
+        <div class="col-md-6">
+            <div class="alert alert-dismissible alert-danger text-center">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>There is no event with code: <span id="code" class="text-dark text-lowercase">@Model.EventCode</span></strong>
+            </div>
+        </div>
+    </div>
+}

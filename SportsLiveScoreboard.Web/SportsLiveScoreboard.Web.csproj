@@ -13,17 +13,27 @@
   <ItemGroup>
     <ProjectReference Include="..\SportsLiveScoreboard.Data.Models\SportsLiveScoreboard.Data.Models.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Data\SportsLiveScoreboard.Data.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Models.ViewModels\SportsLiveScoreboard.Models.ViewModels.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Services.Communication\SportsLiveScoreboard.Services.Communication.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Services.Data\SportsLiveScoreboard.Services.Data.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Services\SportsLiveScoreboard.Services.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Web.Extensions\SportsLiveScoreboard.Web.Extensions.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Web.Utilities\SportsLiveScoreboard.Web.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Areas\Sport\Views\Shared\" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="Areas\Identity\Pages\Account\Manage\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Sport\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Sport\Views\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\_ViewImports.cshtml">

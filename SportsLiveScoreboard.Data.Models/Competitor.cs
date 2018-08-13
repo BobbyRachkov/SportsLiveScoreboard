@@ -12,19 +12,18 @@ namespace SportsLiveScoreboard.Data.Models
     {
         public Competitor()
         {
-            Wins.Init();
-            Losses.Init();
+            Wins = Wins.Init();
+            Losses = Losses.Init();
         }
-        [Required]
-        public string Name { get; set; }
+
+        [Required] public string Name { get; set; }
         public GameRoom Room { get; set; }
         public List<Match> Wins { get; set; }
         public List<Match> Losses { get; set; }
 
         public List<Match> MatchesAsCompetitor1 { get; set; }
         public List<Match> MatchesAsCompetitor2 { get; set; }
-        [NotMapped]
-        public IEnumerable<Match> AllMatches => MatchesAsCompetitor1.Concat(MatchesAsCompetitor2);
+        [NotMapped] public IEnumerable<Match> AllMatches => MatchesAsCompetitor1.Concat(MatchesAsCompetitor2);
 
         public bool IsActualPerson { get; set; }
         public bool IsTheWinnerOfMatch { get; set; }

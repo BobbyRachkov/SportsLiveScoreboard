@@ -1,0 +1,27 @@
+﻿@model SportsLiveScoreboard.Models.BindingModels.Sport.Event.CreateEvent
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="form-group">
+    <fieldset>
+        <label class="control-label" asp-for="Name">Event name:</label>
+        <input class="form-control" asp-for="Name" placeholder="Enter name...">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </fieldset>
+</div>
+<div class="form-group">
+    <div class="custom-control custom-radio">
+        <input type="radio" id="radio1" asp-for="ActivationType" value="0" class="custom-control-input">
+        <label class="custom-control-label" for="radio1">Enter code manually</label>
+        <input id="codeInput" class="form-control" asp-for="Code" disabled/>
+        <span class="text-danger" asp-validation-for="Code"></span>
+    </div>
+    <div class="custom-control custom-radio">
+        <input type="radio" id="radio2" asp-for="ActivationType" value="1" class="custom-control-input" checked="">
+        <label class="custom-control-label" for="radio2">Generate random code</label>
+    </div>
+    <div class="custom-control custom-radio">
+        <input type="radio" id="radio3" asp-for="ActivationType" value="2" class="custom-control-input">
+        <label class="custom-control-label" for="radio3">Enter code later</label>
+    </div>
+</div>
+

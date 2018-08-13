@@ -1,0 +1,93 @@
+﻿@using SportsLiveScoreboard.Models.BindingModels.Sport.Event
+@using SportsLiveScoreboard.Models.ViewModels.Sport.Event.All
+@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.All.AllViewModel
+@{
+    ViewBag.Title = "My Events";
+}
+
+<div class="row">
+    <div class="col-md-5"></div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-success btn-block btn-lg" data-toggle="modal" data-target="#newEventModel">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;Create new Event
+        </button>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Code</th>
+            <th scope="col"># of Game Rooms</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Is Active</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < Model.Events.Count; i++)
+        {
+            <tr class="@(Model.Events[i].IsActive ? "table-success" : "") cursor-pointer">
+                <th scope="row">@(i + 1)</th>
+                <td>@Model.Events[i].Name</td>
+                <td>@Model.Events[i].Code</td>
+                <td>@Model.Events[i].GameRoomCount</td>
+                <td>@Model.Events[i].DateCreated.ToString("dd.MM.yyyy hh:mm")</td>
+                <td>
+                    @(Model.Events[i].IsActive ? "Active" : "Inactive")
+                </td>
+                <input type="hidden" value="@Model.Events[i].Id"/>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+
+<form method="post" asp-action="Create">
+    <div class="modal fade" id="newEventModel" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create new Event</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="_CreateEventPartial" model="new CreateEvent()"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script>
+        let codeInput = $('#codeInput');
+        $('input[type=radio][name=ActivationType]').change(function() {
+            if (this.value == 0) {
+                codeInput.removeAttr('disabled');
+            } else {
+                codeInput.val('');
+                $('#codeInput-error').text('');
+                codeInput.attr('disabled', 'disabled');
+            }
+        });
+    </script>
+
+    <script>
+        $('tr').on('click',
+            function() {
+                let id = $(this).find('input').val();
+                window.location = `/Sport/Event/Edit?id=${id}`;
+            });
+    </script>
+}

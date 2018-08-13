@@ -37,7 +37,7 @@ namespace SportsLiveScoreboard.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, Role>(options =>
-                { 
+                {
                     options.User.RequireUniqueEmail = true;
                     options.SignIn.RequireConfirmedEmail = true;
 
@@ -56,8 +56,9 @@ namespace SportsLiveScoreboard.Web
             services.RegisterServicesFromModule<ServicesModule>();
 
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddRazorPagesOptions(options => { options.AllowAreas = true; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
