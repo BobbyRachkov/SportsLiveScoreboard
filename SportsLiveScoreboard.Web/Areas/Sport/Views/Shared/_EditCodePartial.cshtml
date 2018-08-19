@@ -1,0 +1,35 @@
+﻿@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit.EditCodeViewModel
+<form>
+    <fieldset>
+        <legend>Manage the Event's code</legend>
+        <div class="row col-md-5">
+            <h3>
+                Status:
+                @if (Model.IsActive)
+                {
+                    <string class="text-success">Active</string>
+                }
+                else
+                {
+                    <string class="text-danger">Inacive</string>
+                }
+            </h3>
+            <button class="btn btn-danger ml-auto">Deactivate</button>
+        </div>
+        <div class="form-group col-md-5">
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label col-1" for="readOnlyInput">Current Code:</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control col-5" id="readOnlyInput" type="text" placeholder="<<no code>>" readonly="" value="@Model.Code">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary col-1">Change code</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </fieldset>
+</form>

@@ -10,7 +10,7 @@ namespace SportsLiveScoreboard.Services.Data.Abstraction
     public interface IDataService<T, in TKey, out TService> where T : class, IEntity<TKey>, new()
         where TService : DataServiceBase<T, TKey, TService>
     {
-        IQueryable<T> All();
+        //IQueryable<T> All();
         Task<T> AddAsync();
         Task<T> AddAsync(T entity);
         bool Any(Expression<Func<T, bool>> predicate);

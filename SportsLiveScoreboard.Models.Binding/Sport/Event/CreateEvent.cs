@@ -8,6 +8,7 @@ namespace SportsLiveScoreboard.Models.BindingModels.Sport.Event
         [Required,StringLength(70,MinimumLength = 5,ErrorMessage = StringConstants.StringLengthValidationMessage)]
         public string Name { get; set; }
         [Remote("IsCodeAvailable","Event","Sport",HttpMethod = "POST")]
+        [RegularExpression("[A-Za-z0-9]+")]
         [StringLength(20,MinimumLength = 5,ErrorMessage = StringConstants.StringLengthValidationMessage)]
         public string Code { get; set; }
         public CheckboxResult ActivationType { get; set; }

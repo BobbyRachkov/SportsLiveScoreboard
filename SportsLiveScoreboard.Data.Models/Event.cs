@@ -18,6 +18,8 @@ namespace SportsLiveScoreboard.Data.Models
         }
 
         public string Name { get; set; }
+        [RegularExpression("[A-Za-z0-9]+")]
+        [StringLength(20, MinimumLength = 5)]
         public string Code { get; set; }
         [NotMapped]
         public bool IsActive => !string.IsNullOrWhiteSpace(Code);

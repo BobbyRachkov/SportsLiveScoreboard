@@ -8,6 +8,7 @@ using SportsLiveScoreboard.Data.Models;
 using SportsLiveScoreboard.Models.BindingModels.Sport.Event;
 using SportsLiveScoreboard.Models.ViewModels.Sport.Event;
 using SportsLiveScoreboard.Models.ViewModels.Sport.Event.All;
+using SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit;
 using SportsLiveScoreboard.Services.Data;
 using SportsLiveScoreboard.Services.DateTimeProvider;
 using SportsLiveScoreboard.Services.RandomCodes;
@@ -97,9 +98,15 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            return View();
+            Event e = await _data.Events.GetAsync(id);
+            EditViewModel vm=new EditViewModel();
+            vm.EditCodeViewModel = new EditCodeViewModel
+            {
+                Code = e.Code
+            };
+            return View(vm);
         }
 
         [HttpPost]

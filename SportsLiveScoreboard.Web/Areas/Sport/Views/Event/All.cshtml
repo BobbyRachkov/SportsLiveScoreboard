@@ -6,8 +6,8 @@
 }
 
 <div class="row">
-    <div class="col-md-5"></div>
-    <div class="col-md-2">
+    <div class="col-lg-5"></div>
+    <div class="col-lg-2">
         <button type="button" class="btn btn-success btn-block btn-lg" data-toggle="modal" data-target="#newEventModel">
             <i class="fa fa-plus"></i>&nbsp;&nbsp;Create new Event
         </button>
@@ -34,7 +34,7 @@
                 <td>@Model.Events[i].Name</td>
                 <td>@Model.Events[i].Code</td>
                 <td>@Model.Events[i].GameRoomCount</td>
-                <td>@Model.Events[i].DateCreated.ToString("dd.MM.yyyy hh:mm")</td>
+                <td>@Model.Events[i].DateCreated.ToString("dd.MM.yyyy HH:mm")</td>
                 <td>
                     @(Model.Events[i].IsActive ? "Active" : "Inactive")
                 </td>

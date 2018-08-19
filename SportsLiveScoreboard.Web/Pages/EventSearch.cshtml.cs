@@ -33,7 +33,7 @@ namespace SportsLiveScoreboard.Web.Pages
                 return Page();
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Event", new {area = "Live",code=EventCode});
         }
     }
 }

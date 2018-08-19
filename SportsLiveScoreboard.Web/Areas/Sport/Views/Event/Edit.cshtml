@@ -1,5 +1,39 @@
-﻿@{
+﻿@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit.EditViewModel
+@{
     ViewBag.Title = "Edit";
 }
-
-<h2>Edit</h2>
+<div class="row">
+    <h1>Edit Event: </h1>
+</div>
+<div class="row">
+    <div class="col-12">
+        <ul class="nav nav-tabs height-45px">
+            <li class="nav-item">
+                <a class="nav-link active text-primary" data-toggle="tab" href="#code">Code</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-success"data-toggle="tab" href="#rooms">Game Rooms</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-warning" data-toggle="tab" href="#moderation">Moderation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-danger"data-toggle="tab" href="#dangerZone">Danger Zone</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade show active" id="code">
+                <partial name="_EditCodePartial" model="Model.EditCodeViewModel"/>
+            </div>
+            <div class="tab-pane fade" id="rooms">
+                <partial name="_EditEventRoomsPartial"/>
+            </div>
+            <div class="tab-pane fade" id="moderation">
+                <partial name="_EditModerationPartial"/>
+            </div>
+            <div class="tab-pane fade" id="dangerZone">
+                <partial name="_DangerZonePartial"/>
+            </div>
+        </div>
+    </div>
+</div>
