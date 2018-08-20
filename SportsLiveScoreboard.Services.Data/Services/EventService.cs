@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SportsLiveScoreboard.Data;
@@ -20,6 +21,11 @@ namespace SportsLiveScoreboard.Services.Data.Services
         {
             code = code.ToLower();
             return Any(x => x.Code == code);
+        }
+
+        public Event GetByIdWithIncludedModerators(string id)
+        {
+            return CurrentDbSet.Include(x => x.Moderators).ThenInclude(x => x.User).FirstOrDefault(x => x.Id == id);
         }
 
         public override Task<Event> AddAsync(Event entity)

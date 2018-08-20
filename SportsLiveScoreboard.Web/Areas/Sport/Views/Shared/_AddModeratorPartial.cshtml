@@ -1,0 +1,7 @@
+﻿@model SportsLiveScoreboard.Models.BindingModels.Sport.Event.AddModerator
+<div class="form-group">
+    <label asp-for="Username">Moderator's username:</label>
+    <input class="form-control" asp-for="Username" />
+    <span class="text-danger" asp-validation-for="Username"></span>
+    <input type="hidden" asp-for="EventId" />
+</div>

@@ -1,3 +1,27 @@
-﻿
+﻿@model SportsLiveScoreboard.Models.BindingModels.Sport.Event.TransferOwnership
+<div class="row">
+    <div class="col-md-6">
+        <h2>Transfer Ownership</h2>
+        <form method="post" asp-action="TransferOwnership">
 
-<h1>Danger Zone</h1>
+            <div class="form-group">
+                <label>Enter the new owner's username to transfer the event:</label>
+                <input class="form-control col-8" asp-for="Username" />
+                <span class="text-danger" asp-validation-for="Username"></span>
+                <input type="hidden" asp-for="EventId"/>
+            </div>
+            <button type="submit" class="btn btn-danger">Transfer</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h2>Delete Event</h2>
+        <form method="post" asp-action="Delete">
+            <div class="form-group">
+                <label>Enter the Event's name to delete it:</label>
+                <input type="text" name="EventName" value="" class="form-control"/>
+                <input type="hidden" name="id" value="@Model.EventId"/>
+            </div>
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>

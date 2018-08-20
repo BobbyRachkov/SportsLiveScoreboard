@@ -1,0 +1,15 @@
+﻿@model SportsLiveScoreboard.Models.BindingModels.Sport.Event.EditEventCode
+
+<div class="form-group">
+    <div class="custom-control custom-radio">
+        <input type="radio" id="radio1" asp-for="ActivationType" value="0" class="custom-control-input">
+        <label class="custom-control-label" for="radio1">Enter code manually</label>
+        <input id="codeInput" class="form-control" asp-for="Code" disabled />
+        <span class="text-danger" asp-validation-for="Code"></span>
+    </div>
+    <div class="custom-control custom-radio">
+        <input type="radio" id="radio2" asp-for="ActivationType" value="1" class="custom-control-input" checked="">
+        <label class="custom-control-label" for="radio2">Generate random code</label>
+    </div>
+    <input type="hidden" asp-for="EventId"/>
+</div>

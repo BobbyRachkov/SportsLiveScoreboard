@@ -1,39 +1,77 @@
 ﻿@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit.EditViewModel
+@using SportsLiveScoreboard.Models.BindingModels.Sport.Event
 @{
     ViewBag.Title = "Edit";
 }
 <div class="row">
-    <h1>Edit Event: </h1>
+    <h1>Edit Event: @Model.Name</h1>
 </div>
 <div class="row">
     <div class="col-12">
         <ul class="nav nav-tabs height-45px">
             <li class="nav-item">
-                <a class="nav-link active text-primary" data-toggle="tab" href="#code">Code</a>
+                <a class="nav-link @(ViewBag.Target == "code" || string.IsNullOrWhiteSpace(ViewBag.Target) ? "active" : "") text-primary" data-toggle="tab" href="#code">Code</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-success"data-toggle="tab" href="#rooms">Game Rooms</a>
+                <a class="nav-link @(ViewBag.Target == "rooms" ? "active" : "") text-success"data-toggle="tab" href="#rooms">Game Rooms</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-warning" data-toggle="tab" href="#moderation">Moderation</a>
+                <a class="nav-link @(ViewBag.Target == "moderation" ? "active" : "") text-warning" data-toggle="tab" href="#moderation">Moderation</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger"data-toggle="tab" href="#dangerZone">Danger Zone</a>
+                <a class="nav-link @(ViewBag.Target == "danger" ? "active" : "") text-danger"data-toggle="tab" href="#dangerZone">Danger Zone</a>
             </li>
         </ul>
         <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade show active" id="code">
+            <div class="tab-pane fade @(ViewBag.Target == "code" || string.IsNullOrWhiteSpace(ViewBag.Target) ? "show active" : "")" id="code">
                 <partial name="_EditCodePartial" model="Model.EditCodeViewModel"/>
             </div>
-            <div class="tab-pane fade" id="rooms">
+            <div class="tab-pane fade @(ViewBag.Target == "rooms" ? "show active" : "")" id="rooms">
                 <partial name="_EditEventRoomsPartial"/>
             </div>
-            <div class="tab-pane fade" id="moderation">
-                <partial name="_EditModerationPartial"/>
+            <div class="tab-pane fade @(ViewBag.Target == "moderation" ? "show active" : "")" id="moderation">
+                <partial name="_EditModerationPartial" model="Model.ModeratorsViewModel"/>
             </div>
-            <div class="tab-pane fade" id="dangerZone">
-                <partial name="_DangerZonePartial"/>
+            <div class="tab-pane fade @(ViewBag.Target == "danger" ? "show active" : "")" id="dangerZone">
+                <partial name="_DangerZonePartial" model="new TransferOwnership{EventId=Model.EventId}"/>
             </div>
         </div>
     </div>
 </div>
+
+
+@section Scripts
+{
+    <script>
+        let codeInput = $('#codeInput');
+        $('input[type=radio][name=ActivationType]').change(function() {
+            if (this.value == 0) {
+                codeInput.removeAttr('disabled');
+            } else {
+                codeInput.val('');
+                $('#codeInput-error').text('');
+                codeInput.attr('disabled', 'disabled');
+            }
+        });
+    </script>
+    <script>
+        let eventId = "@Model.EventId";
+        $(document).ready(function() {
+            $('.btn-remove-moderator').on('click',
+                function() {
+                    let trow = $(this).closest('tr');
+                    let uid = $(this).attr('user-id');
+                    $.ajax({
+                        url: "@(Url.Action("RemoveModerator"))",
+                        data: {
+                            userId: uid,
+                            eventId: eventId
+                        },
+                        method: "POST"
+                    }).done(function() {
+                        $(trow).remove();
+                    });
+                });
+        });
+    </script>
+}

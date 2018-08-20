@@ -1,35 +1,70 @@
 ﻿@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit.EditCodeViewModel
-<form>
-    <fieldset>
-        <legend>Manage the Event's code</legend>
-        <div class="row col-md-5">
-            <h3>
-                Status:
-                @if (Model.IsActive)
-                {
-                    <string class="text-success">Active</string>
-                }
-                else
-                {
-                    <string class="text-danger">Inacive</string>
-                }
-            </h3>
-            <button class="btn btn-danger ml-auto">Deactivate</button>
-        </div>
-        <div class="form-group col-md-5">
-            <fieldset>
-                <div class="row">
-                    <div class="col-md-3">
-                        <label class="control-label col-1" for="readOnlyInput">Current Code:</label>
-                    </div>
-                    <div class="col-md-6">
-                        <input class="form-control col-5" id="readOnlyInput" type="text" placeholder="<<no code>>" readonly="" value="@Model.Code">
-                    </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-primary col-1">Change code</button>
-                    </div>
+@using SportsLiveScoreboard.Models.BindingModels.Sport.Event
+
+<fieldset>
+    <legend>Manage the Event's code</legend>
+    <div class="col-md-5">
+            <div class="row align-items-center">
+                <h3 class="col-8">
+                    Status:
+                    @if (Model.IsActive)
+                    {
+                        <strong class="text-success">Active</strong>
+                    }
+                    else
+                    {
+                        <strong class="text-danger">Inacive</strong>
+                    }
+                </h3>
+                <div class="col-4">
+                    @if (Model.IsActive)
+                    {
+                        <form method="post" asp-action="DeactivateEvent">
+                            <button class="btn btn-block btn-danger">Deactivate</button>
+                            <input type="hidden" name="id" value="@Model.EventId"/>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-block btn-success" data-toggle="modal" data-target="#changeEventCodeModal">Activate</button>
+                    }
                 </div>
-            </fieldset>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-3">
+                    <label class="control-label" for="readOnlyInput">Current Code:</label>
+                </div>
+                <div class="col-5">
+                    <input class="form-control" id="readOnlyInput" type="text" placeholder="<<no code>>" readonly="" value="@Model.Code">
+                </div>
+                <div class="col-4">
+                    @if (Model.IsActive)
+                    {
+                        <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#changeEventCodeModal">Change code</button>
+                    }
+                </div>
+            </div>
         </div>
-    </fieldset>
+</fieldset>
+
+<form method="post" asp-action="ChangeCode">
+    <div class="modal fade" id="changeEventCodeModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enter new Code</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="_SelectCodePartial" model="new EditEventCode{EventId=Model.EventId}"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>

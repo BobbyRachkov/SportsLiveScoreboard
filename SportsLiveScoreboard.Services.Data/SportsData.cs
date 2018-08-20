@@ -16,6 +16,7 @@ namespace SportsLiveScoreboard.Services.Data
         private readonly SignInManager<User> _signInManager;
 
         private Lazy<IEventService> eventService;
+        private Lazy<IUserService> userService;
 
         public SportsData(SportsDbContext dbContext, UserManager<User> userManager, RoleManager<Role> roleManager,
             SignInManager<User> signInManager)
@@ -26,6 +27,7 @@ namespace SportsLiveScoreboard.Services.Data
             _signInManager = signInManager;
 
             eventService = eventService.InitLazy(new EventService(this));
+            userService = userService.InitLazy(new UserService(this));
         }
         internal SportsDbContext Context { get; }
 
@@ -33,6 +35,8 @@ namespace SportsLiveScoreboard.Services.Data
         public RoleManager<Role> RoleManager => _roleManager;
         public SignInManager<User> SignInManager => _signInManager;
         public IEventService Events => eventService.Value;
+        public IUserService Users => userService.Value;
+
 
 
         public void SaveChanges()

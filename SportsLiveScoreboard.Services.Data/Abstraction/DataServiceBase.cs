@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using SportsLiveScoreboard.Data.Models.Abstraction;
 
 namespace SportsLiveScoreboard.Services.Data.Abstraction
@@ -74,7 +75,7 @@ namespace SportsLiveScoreboard.Services.Data.Abstraction
         public TService Include<TProp>(Expression<Func<T, TProp>> navigationPropertyPath)
         {
             _query = _query.Include(navigationPropertyPath);
-            return (TService) this;
+            return (TService)this;
         }
 
         public TService OrderBy<TProp>(Expression<Func<T, TProp>> property)

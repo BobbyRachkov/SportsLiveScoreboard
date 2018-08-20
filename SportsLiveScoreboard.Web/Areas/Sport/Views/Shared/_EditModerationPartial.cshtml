@@ -1,2 +1,51 @@
-﻿<h1>Edit moderation</h1>
+﻿@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit.ModeratorsViewModel
+@using SportsLiveScoreboard.Models.BindingModels.Sport.Event
+<div class="row" style="padding-top:10px;padding-bottom: 10px">
+    <div class="col-lg-5"></div>
+    <div class="col-lg-2">
+        <button type="button" class="btn btn-success btn-block btn-lg" data-toggle="modal" data-target="#newModerator">
+            <i class="fa fa-plus"></i> Add Moderator
+        </button>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < Model.Moderators.Count; i++)
+        {
+            <tr>
+                <td>@Model.Moderators[i].Username</td>
+                <td><button user-id="@Model.Moderators[i].Id" class="btn btn-sm btn-danger btn-remove-moderator">Remove</button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
 
+<form method="post" asp-action="AddModerator">
+    <div class="modal fade" id="newModerator" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add moderator</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="_AddModeratorPartial" model="new AddModerator{EventId=Model.EventId}" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

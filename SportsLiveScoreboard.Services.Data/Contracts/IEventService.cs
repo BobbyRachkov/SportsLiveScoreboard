@@ -8,5 +8,6 @@ namespace SportsLiveScoreboard.Services.Data.Contracts
     public interface IEventService : IDataService<Event, string, EventService>
     {
         bool ExistsWithCode(string code);
+        Event GetByIdWithIncludedModerators(string id);
     }
 }

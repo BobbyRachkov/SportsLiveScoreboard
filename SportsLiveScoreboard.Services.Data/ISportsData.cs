@@ -8,6 +8,7 @@ namespace SportsLiveScoreboard.Services.Data
     public interface ISportsData
     {
         IEventService Events { get; }
+        IUserService Users { get; }
         RoleManager<Role> RoleManager { get; }
         SignInManager<User> SignInManager { get; }
         UserManager<User> UserManager { get; }
