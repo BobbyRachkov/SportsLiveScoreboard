@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using SportsLiveScoreboard.Data.Models.Abstraction;
 using SportsLiveScoreboard.Extensions;
 
-namespace SportsLiveScoreboard.Data.Models.Game.Models
+namespace SportsLiveScoreboard.Data.Models.Game
 {
     public class GameRoom : EntityBase<int>
     {
@@ -14,11 +14,17 @@ namespace SportsLiveScoreboard.Data.Models.Game.Models
         }
 
         [Required, StringLength(50, MinimumLength = 3)]
-        public string SportName { get; set; }
+        public string Name { get; set; }
 
+        public string EventId { get; set; }
+        [Required]
         public Event Event { get; set; }
         public List<Match> Matches { get; set; }
         public List<Competitor> Competitors { get; set; }
-        public GameOptions GameOptions { get; set; }
+        public int GameSettingsId { get; set; }
+        public GameSettings GameSettings { get; set; }
+
+        public int SportTypeId { get; set; }
+        public SportType SportType { get; set; }
     }
 }

@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsLiveScoreboard.Data;
 
 namespace SportsLiveScoreboard.Data.Migrations
 {
     [DbContext(typeof(SportsDbContext))]
-    [Migration("20180813192432_MinorChanges")]
-    partial class MinorChanges
+    partial class SportsDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,14 +113,14 @@ namespace SportsLiveScoreboard.Data.Migrations
 
                     b.Property<string>("CompetitorFromMatchId");
 
-                    b.Property<bool>("IsActualPerson");
+                    b.Property<bool>("IsComputedPerson");
 
                     b.Property<bool>("IsTheWinnerOfMatch");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("RoomId");
+                    b.Property<int>("RoomId");
 
                     b.HasKey("Id");
 
@@ -138,11 +136,13 @@ namespace SportsLiveScoreboard.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Code");
+                    b.Property<string>("Code")
+                        .HasMaxLength(20);
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<string>("OwnerId");
 
@@ -153,7 +153,50 @@ namespace SportsLiveScoreboard.Data.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.GameOptions", b =>
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.GameRoom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("EventId")
+                        .IsRequired();
+
+                    b.Property<int>("GameSettingsId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("SportTypeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("GameSettingsId");
+
+                    b.HasIndex("SportTypeId");
+
+                    b.ToTable("GameRooms");
+                });
+
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.GameScoreInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PointsId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PointsId");
+
+                    b.ToTable("GameScoreInfo");
+                });
+
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.GameSettings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -163,43 +206,24 @@ namespace SportsLiveScoreboard.Data.Migrations
 
                     b.Property<bool>("IsPeriodPlayable");
 
+                    b.Property<bool>("IsPlayedForTime");
+
                     b.Property<bool>("IsSetPlayable");
 
-                    b.Property<int>("MaxGamesCount");
+                    b.Property<int>("MinGamesCount");
 
-                    b.Property<int>("MaxSetsCount");
+                    b.Property<int>("MinPeriodNumber");
 
-                    b.Property<int>("PeriodNumber");
+                    b.Property<int>("MinScore");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("GameOptions");
-                });
-
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.GameRoom", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("EventId");
-
-                    b.Property<int?>("GameOptionsId");
-
-                    b.Property<string>("SportName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<int>("MinSetsCount");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("GameOptionsId");
-
-                    b.ToTable("GameRooms");
+                    b.ToTable("GameSettings");
                 });
 
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.Match", b =>
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Match", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -210,21 +234,19 @@ namespace SportsLiveScoreboard.Data.Migrations
 
                     b.Property<int>("Competitor2Id");
 
-                    b.Property<int?>("GameRoomId");
+                    b.Property<int>("GameSettingsId");
 
-                    b.Property<bool>("IsPlayedForTime");
-
-                    b.Property<int?>("LoserId");
-
-                    b.Property<int?>("OptionsId");
-
-                    b.Property<int?>("PointsId");
+                    b.Property<int>("RoomId");
 
                     b.Property<DateTime>("ScheduledStartTime");
 
+                    b.Property<int>("ScoreInfoId");
+
                     b.Property<int>("Status");
 
-                    b.Property<int?>("WinnerId");
+                    b.Property<int>("TypeId");
+
+                    b.Property<int>("WinnerIndex");
 
                     b.HasKey("Id");
 
@@ -232,20 +254,18 @@ namespace SportsLiveScoreboard.Data.Migrations
 
                     b.HasIndex("Competitor2Id");
 
-                    b.HasIndex("GameRoomId");
+                    b.HasIndex("GameSettingsId");
 
-                    b.HasIndex("LoserId");
+                    b.HasIndex("RoomId");
 
-                    b.HasIndex("OptionsId");
+                    b.HasIndex("ScoreInfoId");
 
-                    b.HasIndex("PointsId");
-
-                    b.HasIndex("WinnerId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Matches");
                 });
 
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.Score", b =>
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Score", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,19 +275,33 @@ namespace SportsLiveScoreboard.Data.Migrations
 
                     b.Property<int>("Competitor2");
 
-                    b.Property<int?>("GameOptionsId");
+                    b.Property<int?>("GameScoreInfoId");
 
-                    b.Property<int?>("GameOptionsId1");
+                    b.Property<int?>("GameScoreInfoId1");
 
                     b.Property<int>("SequentialNumber");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GameOptionsId");
+                    b.HasIndex("GameScoreInfoId");
 
-                    b.HasIndex("GameOptionsId1");
+                    b.HasIndex("GameScoreInfoId1");
 
                     b.ToTable("Scores");
+                });
+
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.SportType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SportTypes");
                 });
 
             modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Identity.Role", b =>
@@ -405,13 +439,14 @@ namespace SportsLiveScoreboard.Data.Migrations
 
             modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Competitor", b =>
                 {
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.Match", "CompetitorFromMatch")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Match", "CompetitorFromMatch")
                         .WithMany()
                         .HasForeignKey("CompetitorFromMatchId");
 
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.GameRoom", "Room")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameRoom", "Room")
                         .WithMany("Competitors")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Event", b =>
@@ -421,61 +456,71 @@ namespace SportsLiveScoreboard.Data.Migrations
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.GameRoom", b =>
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.GameRoom", b =>
                 {
                     b.HasOne("SportsLiveScoreboard.Data.Models.Event", "Event")
                         .WithMany("Rooms")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.GameOptions", "GameOptions")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameSettings", "GameSettings")
                         .WithMany()
-                        .HasForeignKey("GameOptionsId");
+                        .HasForeignKey("GameSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.SportType", "SportType")
+                        .WithMany()
+                        .HasForeignKey("SportTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.Match", b =>
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.GameScoreInfo", b =>
+                {
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Score", "Points")
+                        .WithMany()
+                        .HasForeignKey("PointsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Match", b =>
                 {
                     b.HasOne("SportsLiveScoreboard.Data.Models.Competitor", "Competitor1")
                         .WithMany("MatchesAsCompetitor1")
-                        .HasForeignKey("Competitor1Id")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Competitor1Id");
 
                     b.HasOne("SportsLiveScoreboard.Data.Models.Competitor", "Competitor2")
                         .WithMany("MatchesAsCompetitor2")
-                        .HasForeignKey("Competitor2Id")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Competitor2Id");
 
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.GameRoom")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameSettings", "Settings")
+                        .WithMany()
+                        .HasForeignKey("GameSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameRoom", "Room")
                         .WithMany("Matches")
-                        .HasForeignKey("GameRoomId");
+                        .HasForeignKey("RoomId");
 
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Competitor", "Loser")
-                        .WithMany("Losses")
-                        .HasForeignKey("LoserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.GameOptions", "Options")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameScoreInfo", "ScoreInfo")
                         .WithMany()
-                        .HasForeignKey("OptionsId");
+                        .HasForeignKey("ScoreInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.Score", "Points")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.SportType", "Type")
                         .WithMany()
-                        .HasForeignKey("PointsId");
-
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Competitor", "Winner")
-                        .WithMany("Wins")
-                        .HasForeignKey("WinnerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Models.Score", b =>
+            modelBuilder.Entity("SportsLiveScoreboard.Data.Models.Game.Score", b =>
                 {
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.GameOptions")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameScoreInfo")
                         .WithMany("Games")
-                        .HasForeignKey("GameOptionsId");
+                        .HasForeignKey("GameScoreInfoId");
 
-                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.Models.GameOptions")
+                    b.HasOne("SportsLiveScoreboard.Data.Models.Game.GameScoreInfo")
                         .WithMany("Sets")
-                        .HasForeignKey("GameOptionsId1");
+                        .HasForeignKey("GameScoreInfoId1");
                 });
 
             modelBuilder.Entity("SportsLiveScoreboard.Data.Models.UserEvents", b =>
@@ -486,7 +531,7 @@ namespace SportsLiveScoreboard.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SportsLiveScoreboard.Data.Models.Identity.User", "User")
-                        .WithMany()
+                        .WithMany("EventsInModeration")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

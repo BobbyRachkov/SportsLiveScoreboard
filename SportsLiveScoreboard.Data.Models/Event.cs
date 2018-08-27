@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SportsLiveScoreboard.Data.Models.Abstraction;
-using SportsLiveScoreboard.Data.Models.Game.Models;
+using SportsLiveScoreboard.Data.Models.Game;
 using SportsLiveScoreboard.Data.Models.Identity;
 using SportsLiveScoreboard.Extensions;
 
@@ -17,6 +17,7 @@ namespace SportsLiveScoreboard.Data.Models
             Rooms = Rooms.Init();
         }
 
+        [Required]
         public string Name { get; set; }
         [RegularExpression("[A-Za-z0-9]+")]
         [StringLength(20, MinimumLength = 5)]

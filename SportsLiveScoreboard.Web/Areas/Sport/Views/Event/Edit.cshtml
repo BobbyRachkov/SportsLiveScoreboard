@@ -3,6 +3,18 @@
 @{
     ViewBag.Title = "Edit";
 }
+
+@section Stylesheets
+{
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+}
+
 <div class="row">
     <h1>Edit Event: @Model.Name</h1>
 </div>
@@ -13,13 +25,13 @@
                 <a class="nav-link @(ViewBag.Target == "code" || string.IsNullOrWhiteSpace(ViewBag.Target) ? "active" : "") text-primary" data-toggle="tab" href="#code">Code</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @(ViewBag.Target == "rooms" ? "active" : "") text-success"data-toggle="tab" href="#rooms">Game Rooms</a>
+                <a class="nav-link @(ViewBag.Target == "rooms" ? "active" : "") text-success" data-toggle="tab" href="#rooms">Game Rooms</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(ViewBag.Target == "moderation" ? "active" : "") text-warning" data-toggle="tab" href="#moderation">Moderation</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @(ViewBag.Target == "danger" ? "active" : "") text-danger"data-toggle="tab" href="#dangerZone">Danger Zone</a>
+                <a class="nav-link @(ViewBag.Target == "danger" ? "active" : "") text-danger" data-toggle="tab" href="#dangerZone">Danger Zone</a>
             </li>
         </ul>
         <div id="myTabContent" class="tab-content">
@@ -27,7 +39,7 @@
                 <partial name="_EditCodePartial" model="Model.EditCodeViewModel"/>
             </div>
             <div class="tab-pane fade @(ViewBag.Target == "rooms" ? "show active" : "")" id="rooms">
-                <partial name="_EditEventRoomsPartial"/>
+                <partial name="_EditEventRoomsPartial" model="Model.RoomsViewModel"/>
             </div>
             <div class="tab-pane fade @(ViewBag.Target == "moderation" ? "show active" : "")" id="moderation">
                 <partial name="_EditModerationPartial" model="Model.ModeratorsViewModel"/>
@@ -57,21 +69,66 @@
     <script>
         let eventId = "@Model.EventId";
         $(document).ready(function() {
-            $('.btn-remove-moderator').on('click',
+            $('.btn-remove-tr').on('click',
                 function() {
-                    let trow = $(this).closest('tr');
-                    let uid = $(this).attr('user-id');
+                    let row = $(this).closest('tr');
+                    let id = $(this).attr('id');
+                    let url = $(this).attr('post-url');
                     $.ajax({
-                        url: "@(Url.Action("RemoveModerator"))",
+                        url: url,
                         data: {
-                            userId: uid,
+                            id: id,
                             eventId: eventId
                         },
                         method: "POST"
                     }).done(function() {
-                        $(trow).remove();
+                        $(row).remove();
                     });
                 });
         });
+    </script>
+
+    <script>
+        function correspondingInput(triggerButton) {
+            return $($($(triggerButton).parents('.input-group')[0]).find('input[type=number]')[0]);
+        }
+
+        function calculate(sourceElement, action) {
+            let source = correspondingInput(sourceElement);
+            let val = Number(source.val());
+            let newVal = action(val);
+            source.val(newVal);
+            source.trigger("change");
+            source.focus();
+            $(sourceElement).focus();
+        }
+
+        $('.btn-minus').on('click',
+            function() {
+                calculate(this, number => --number);
+            });
+        $('.btn-plus').on('click',
+            function() {
+                calculate(this, number => ++number);
+            });
+    </script>
+
+    <script>
+        function getCorrespondingSpan(element) {
+            return $($($(element).parents('div.form-group')[0]).children('span.of-max-games'));
+        }
+
+        $(document).ready(function () {
+            let inputs = $('input.min-games');
+            for (let i=0;i<inputs.length;i++) {
+                $(inputs[i]).trigger("change");
+            }
+        });
+        $('.min-games').on('change',
+            function() {
+                let num = Number($(this).val());
+                let distSpan = getCorrespondingSpan(this);
+                distSpan.text(`of ${num*2-1} games`);
+            });
     </script>
 }

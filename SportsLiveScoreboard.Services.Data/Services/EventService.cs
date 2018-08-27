@@ -11,9 +11,9 @@ using SportsLiveScoreboard.Services.Data.Contracts;
 
 namespace SportsLiveScoreboard.Services.Data.Services
 {
-    public class EventService : DataServiceBase<Event, string,EventService>,IEventService
+    public class EventService : DataServiceBase<Event, string, EventService>, IEventService
     {
-        public EventService(SportsData data):base(data)
+        public EventService(SportsData data) : base(data)
         {
         }
 
@@ -39,5 +39,13 @@ namespace SportsLiveScoreboard.Services.Data.Services
             code = code.ToLower();
             return await GetFirstAsync(x => x.Code == code);
         }
+
+        public async Task<Event> GetByIdWithIncludedRoomsAndMatches(string id) =>
+            await CurrentDbSet
+                .Include(x => x.Rooms)
+                .ThenInclude(x => x.Matches)
+                .Include(x=>x.Rooms)
+                .ThenInclude(x=>x.SportType)
+                .FirstOrDefaultAsync(x => x.Id == id);
     }
 }

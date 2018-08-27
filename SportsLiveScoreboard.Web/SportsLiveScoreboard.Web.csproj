@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SportsLiveScoreboard.Data.Models\SportsLiveScoreboard.Data.Models.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Data.SeedingExtensions\SportsLiveScoreboard.Data.SeedingExtensions.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Data\SportsLiveScoreboard.Data.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Models.ViewModels\SportsLiveScoreboard.Models.ViewModels.csproj" />
     <ProjectReference Include="..\SportsLiveScoreboard.Services.Communication\SportsLiveScoreboard.Services.Communication.csproj" />

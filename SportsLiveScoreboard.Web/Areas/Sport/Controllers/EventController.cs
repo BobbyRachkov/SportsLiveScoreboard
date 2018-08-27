@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -13,19 +14,20 @@ using SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit;
 using SportsLiveScoreboard.Services.Data;
 using SportsLiveScoreboard.Services.DateTimeProvider;
 using SportsLiveScoreboard.Services.RandomCodes;
+using SportsLiveScoreboard.Web.Architecture;
 
 namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
 {
     [Area(nameof(Sport))]
     [Authorize]
-    public class EventController : Controller
+    public class EventController : SportController
     {
         private readonly ISportsData _data;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRandomCodeProvider _randomCodeProvider;
 
         public EventController(ISportsData data, IDateTimeProvider dateTimeProvider,
-            IRandomCodeProvider randomCodeProvider)
+            IRandomCodeProvider randomCodeProvider):base(data)
         {
             _data = data;
             _dateTimeProvider = dateTimeProvider;
@@ -94,13 +96,12 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         public async Task<IActionResult> Edit(string id, string target)
         {
             ViewBag.Target = target;
-            Event e = await _data.Events.GetAsync(id);
-            User user = await _data.UserManager.GetUserAsync(User);
+            Event e = await _data.Events.GetByIdWithIncludedRoomsAndMatches(id);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -113,7 +114,20 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                     EventId = e.Id,
                     Code = e.Code
                 },
-                ModeratorsViewModel = GetModeratorsViewModel(id)
+                ModeratorsViewModel = GetModeratorsViewModel(id),
+                RoomsViewModel = new EditRoomsViewModel
+                {
+                    EventId = id,
+                    GameRooms = e.Rooms
+                        .Select(x =>new GameRoomViewModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            MatchesCount = x.Matches.Count,
+                            SportType = x.SportType.Name
+                        })
+                        .ToList()
+                }
             };
             return View(vm);
         }
@@ -147,7 +161,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -170,12 +184,11 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                 return RedirectToAction(nameof(Edit), new {id = model.EventId});
             }
             Event e = await _data.Events.GetAsync(model.EventId);
-            User user = await _data.UserManager.GetUserAsync(User);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -201,7 +214,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -219,7 +232,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -244,7 +257,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -263,12 +276,11 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         public async Task<IActionResult> RemoveModerator(string eventId, string userId)
         {
             Event e = await _data.Events.Include(x => x.Moderators).GetAsync(eventId);
-            User user = await _data.UserManager.GetUserAsync(User);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(user, e))
+            if (!IsOwnerOrAdministrator(e))
             {
                 return Unauthorized();
             }
@@ -287,6 +299,12 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
+
+            if (username==User.Identity.Name)
+            {
+                return Json("You cannot add yourself as a moderator.");
+            }
+
             if (!_data.Users.Any(x => x.UserName == username))
             {
                 return Json("No profile with such username.");
@@ -333,12 +351,6 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             }
 
             return code;
-        }
-
-        private bool IsOwnerOrAdministrator(User user, Event evnt)
-        {
-            return evnt.OwnerId == user.Id ||
-                   _data.UserManager.IsInRoleAsync(user, nameof(RoleType.Administrator)).Result;
         }
     }
 }

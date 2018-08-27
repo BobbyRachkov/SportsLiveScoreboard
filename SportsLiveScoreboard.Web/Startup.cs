@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SportsLiveScoreboard.Data;
 using SportsLiveScoreboard.Data.Models.Identity;
+using SportsLiveScoreboard.Data.SeedingExtensions;
 using SportsLiveScoreboard.Services.Communication;
 using SportsLiveScoreboard.Web.Extensions;
 
@@ -62,7 +63,7 @@ namespace SportsLiveScoreboard.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SportsDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -74,6 +75,11 @@ namespace SportsLiveScoreboard.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            context
+                .SeedRoles()
+                .SeedSportTypes()
+                .SaveChanges();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

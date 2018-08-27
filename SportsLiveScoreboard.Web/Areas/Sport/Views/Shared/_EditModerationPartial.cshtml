@@ -21,7 +21,7 @@
         {
             <tr>
                 <td>@Model.Moderators[i].Username</td>
-                <td><button user-id="@Model.Moderators[i].Id" class="btn btn-sm btn-danger btn-remove-moderator">Remove</button></td>
+                <td><button post-url="@(Url.Action("RemoveModerator"))" id="@Model.Moderators[i].Id" class="btn btn-sm btn-danger btn-remove-tr">Remove</button></td>
             </tr>
         }
         </tbody>

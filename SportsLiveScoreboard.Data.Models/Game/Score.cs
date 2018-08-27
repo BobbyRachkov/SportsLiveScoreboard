@@ -1,6 +1,6 @@
 ﻿using SportsLiveScoreboard.Data.Models.Abstraction;
 
-namespace SportsLiveScoreboard.Data.Models.Game.Models
+namespace SportsLiveScoreboard.Data.Models.Game
 {
     public class Score : EntityBase<int>
     {

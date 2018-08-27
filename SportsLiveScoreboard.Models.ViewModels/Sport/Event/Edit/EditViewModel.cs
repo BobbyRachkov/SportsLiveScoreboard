@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public EditCodeViewModel EditCodeViewModel { get; set; }
         public ModeratorsViewModel ModeratorsViewModel { get; set; }
+        public EditRoomsViewModel RoomsViewModel { get; set; }
     }
 }

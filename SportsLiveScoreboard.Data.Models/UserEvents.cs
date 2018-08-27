@@ -1,4 +1,5 @@
-﻿using SportsLiveScoreboard.Data.Models.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using SportsLiveScoreboard.Data.Models.Identity;
 
 namespace SportsLiveScoreboard.Data.Models
 {

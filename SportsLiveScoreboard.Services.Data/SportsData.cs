@@ -17,6 +17,8 @@ namespace SportsLiveScoreboard.Services.Data
 
         private Lazy<IEventService> eventService;
         private Lazy<IUserService> userService;
+        private Lazy<ISportTypeService> sportTypeService;
+        private Lazy<IGameRoomService> gameRoomService;
 
         public SportsData(SportsDbContext dbContext, UserManager<User> userManager, RoleManager<Role> roleManager,
             SignInManager<User> signInManager)
@@ -28,6 +30,8 @@ namespace SportsLiveScoreboard.Services.Data
 
             eventService = eventService.InitLazy(new EventService(this));
             userService = userService.InitLazy(new UserService(this));
+            sportTypeService = sportTypeService.InitLazy(new SportTypeService(this));
+            gameRoomService = gameRoomService.InitLazy(new GameRoomService(this));
         }
         internal SportsDbContext Context { get; }
 
@@ -36,7 +40,8 @@ namespace SportsLiveScoreboard.Services.Data
         public SignInManager<User> SignInManager => _signInManager;
         public IEventService Events => eventService.Value;
         public IUserService Users => userService.Value;
-
+        public ISportTypeService SportTypes => sportTypeService.Value;
+        public IGameRoomService GameRooms => gameRoomService.Value;
 
 
         public void SaveChanges()

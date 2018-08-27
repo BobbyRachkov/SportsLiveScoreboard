@@ -5,7 +5,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Migrations\20180811142929_Initial.cs" />
+    <Compile Remove="Migrations\20180812205902_GameModelsAlphaVersion.cs" />
     <Compile Remove="Migrations\20180813170019_GameOptionsAddedPlusSomeDateTimes.cs" />
+    <Compile Remove="Migrations\20180813170302_GameOptionsAddedPlusSomeDateTimes.cs" />
+    <Compile Remove="Migrations\20180813192432_MinorChanges.cs" />
+    <Compile Remove="Migrations\20180825131242_SportTypeAdded.cs" />
+    <Compile Remove="Migrations\20180825132129_SportTypeAdded.cs" />
+    <Compile Remove="Migrations\20180825151035_GameRoomNameAdded.cs" />
+    <Compile Remove="Migrations\20180827092538_GameRoomNavIdPropsAdded.cs" />
+    <Compile Remove="Migrations\20180827104245_GameOptionsRenameProps.cs" />
+    <Compile Remove="Migrations\20180827173345_BreakingChanges.cs" />
+    <Compile Remove="Migrations\20180827174935_Initial.cs" />
+    <Compile Remove="Migrations\20180827175327_Initial.cs" />
+    <Compile Remove="Migrations\20180827180404_Initial.cs" />
+    <Compile Remove="Migrations\20180827180628_Initial.cs" />
+    <Compile Remove="Migrations\20180827181213_Initial.cs" />
+    <Compile Remove="Migrations\20180827183957_Initial.cs" />
+    <Compile Remove="Migrations\20180827184626_Initial.cs" />
+    <Compile Remove="Migrations\20180827185143_Initial.cs" />
+    <Compile Remove="Migrations\20180827185419_Initial.cs" />
+    <Compile Remove="Migrations\20180827190019_Initial.cs" />
+    <Compile Remove="Migrations\20180827190654_Initial.cs" />
   </ItemGroup>
 
   <ItemGroup>

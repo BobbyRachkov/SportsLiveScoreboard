@@ -1,2 +1,108 @@
-﻿<h1>Event rooms</h1>
+﻿@using SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit
+@using SportsLiveScoreboard.Models.BindingModels.Sport.Room
+@model SportsLiveScoreboard.Models.ViewModels.Sport.Event.Edit.EditRoomsViewModel
+<div class="row">
+    <div class="col-md-4">
+        <br />
+        <div class="card border-dark mb-3">
+            <div class="card-header">Create new game room:</div>
+            <div class="card-body" style="padding: 10px;">
+                <div class="list-group">
+                    <a href="#" data-toggle="modal" data-target="#newBasketball" class="list-group-item list-group-item-action">Basketball</a>
+                    <a href="#" data-toggle="modal" data-target="#newVolleyball" class="list-group-item list-group-item-action">Volleyball</a>
+                    <a href="#" data-toggle="modal" data-target="#newTableTennis" class="list-group-item list-group-item-action">Table Tennis</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <br />
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Sport Type</th>
+                    <th scope="col">Matches Count</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (GameRoomViewModel room in Model.GameRooms)
+                {
+                    <tr>
+                        <td>@room.Name</td>
+                        <td>@room.SportType</td>
+                        <td>@room.MatchesCount</td>
+                        <td>
+                            <button post-url="@Url.Action("DeleteRoom","Room")" id="@room.Id" class="btn btn-sm btn-danger btn-remove-tr">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
+<form method="post" asp-controller="Room" asp-action="CreateBasketballRoom">
+    <div class="modal fade" id="newBasketball" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Basketball Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="_CreateBasketballRoomPartial" model="new CreateBasketballRoom{EventId=Model.EventId,MinPeriods=4}" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form method="post" asp-controller="Room" asp-action="CreateVolleyballRoom">
+    <div class="modal fade" id="newVolleyball" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Volleyball Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="_CreateVolleyballRoomPartial" model="new CreateVolleyballRoom{EventId=Model.EventId,MinGames=3,MinPoints=25}" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form method="post" asp-controller="Room" asp-action="CreateTableTennisRoom">
+        <div class="modal fade" id="newTableTennis" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Table Tennis Room</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <partial name="_CreateTableTennisRoomPartial" model="new CreateTableTennisRoom{EventId=Model.EventId,MinGames=3}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>

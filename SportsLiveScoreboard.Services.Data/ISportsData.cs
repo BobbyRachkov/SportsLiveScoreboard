@@ -9,6 +9,9 @@ namespace SportsLiveScoreboard.Services.Data
     {
         IEventService Events { get; }
         IUserService Users { get; }
+        ISportTypeService SportTypes { get; }
+        IGameRoomService GameRooms { get; }
+
         RoleManager<Role> RoleManager { get; }
         SignInManager<User> SignInManager { get; }
         UserManager<User> UserManager { get; }

@@ -9,5 +9,6 @@ namespace SportsLiveScoreboard.Services.Data.Contracts
     {
         bool ExistsWithCode(string code);
         Event GetByIdWithIncludedModerators(string id);
+        Task<Event> GetByIdWithIncludedRoomsAndMatches(string id);
     }
 }

@@ -1,0 +1,25 @@
+﻿@model SportsLiveScoreboard.Models.BindingModels.Sport.Room.CreateBasketballRoom
+<div class="form-group">
+    <label asp-for="Name"></label>
+    <input asp-for="Name" class="form-control"/>
+    <span class="text-danger" asp-validation-for="Name"></span>
+</div>
+<div class="form-group">
+    <label asp-for="MinPeriods">Periods</label>
+    <div class="input-group mb-3" style="width: 110px;">
+        <div class="input-group-prepend">
+            <button type="button" class="btn btn-info btn-minus">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+        <input asp-for="MinPeriods" class="form-control">
+        <div class="input-group-append">
+            <button type="button" class="btn btn-info btn-plus">
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
+    </div>
+    <span class="text-danger" asp-validation-for="MinPeriods"></span>
+</div>
+<input type="hidden" asp-for="EventId" />
+
