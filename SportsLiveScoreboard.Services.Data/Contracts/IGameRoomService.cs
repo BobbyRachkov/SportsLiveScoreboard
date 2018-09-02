@@ -8,5 +8,7 @@ namespace SportsLiveScoreboard.Services.Data.Contracts
     public interface IGameRoomService:IDataService<GameRoom,int,GameRoomService>
     {
         Task<bool> ExistsGameWithNameAsync(string name);
+        Task<GameRoom> GetByIdWithIncludedEventAndModeratorsJoinObject(int id);
+        Task<GameRoom> GetByIdWithIncludedEventAndModeratorsFullObject(int id);
     }
 }

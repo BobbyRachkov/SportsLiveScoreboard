@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using SportsLiveScoreboard.Data.Models;
 using SportsLiveScoreboard.Data.Models.Game;
 using SportsLiveScoreboard.Extensions;
 using SportsLiveScoreboard.Models.BindingModels.Sport.Room;
+using SportsLiveScoreboard.Models.ViewModels.Sport.Room.Edit;
 using SportsLiveScoreboard.Services.Data;
 using SportsLiveScoreboard.Web.Architecture;
 using GameSettings = SportsLiveScoreboard.Data.Models.Game.GameSettings;
@@ -19,6 +21,38 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
     {
         public RoomController(ISportsData data) : base(data)
         {
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int roomId, string eventId)
+        {
+            GameRoom room = await Data
+                .GameRooms
+                .Include(x => x.Event)
+                .Include(x => x.Matches)
+                .Include(x => x.Competitors)
+                .Include(x => x.SportType)
+                .Include(x => x.GameSettings)
+                .GetAsync(roomId);
+            if (room.IsNull() || room.EventId != eventId)
+            {
+                return NotFound();
+            }
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverRoom(room, DbUser))
+            {
+                return Unauthorized();
+            }
+
+
+            return View(new EditRoomViewModel
+            {
+                EventId = eventId,
+                RoomId = roomId,
+                EventName = room.Event.Name,
+                RoomName = room.Name
+            });
         }
 
         [HttpPost]
@@ -39,19 +73,24 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (room.EventId!=eventId)
+
+            if (room.EventId != eventId)
             {
                 return BadRequest();
             }
-            if (!IsOwnerOrAdministrator(room.Event))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverRoom(room,DbUser))
             {
                 return Unauthorized();
             }
+
             Data.GameRooms.Delete(room);
             await Data.SaveChangesAsync();
 
             return NoContent();
         }
+
+        #region RoomCreation
 
         [HttpPost]
         public async Task<IActionResult> CreateBasketballRoom(CreateBasketballRoom model)
@@ -61,7 +100,8 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
@@ -89,6 +129,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             return RedirectToAction("Edit", "Event", new {area = "Sport", id = model.EventId, target = "rooms"});
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateVolleyballRoom(CreateVolleyballRoom model)
         {
             Event e = await Data.Events.Include(x => x.Rooms).GetAsync(model.EventId);
@@ -96,7 +137,8 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
@@ -114,22 +156,26 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                 {
                     IsPlayedForTime = false,
                     IsGamePlayable = true,
-                    MinGamesCount = model.MinGames
+                    MinGamesCount = model.MinGames,
+                    MinScore = model.MinPoints
                 }
             };
             e.Rooms.Add(room);
             await Data.SaveChangesAsync();
 
-            return RedirectToAction("Edit", "Event", new { area = "Sport", id = model.EventId, target = "rooms" });
+            return RedirectToAction("Edit", "Event", new {area = "Sport", id = model.EventId, target = "rooms"});
         }
-        public async Task<IActionResult> CreateTableTennisRoom(CreateVolleyballRoom model)
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTableTennisRoom(CreateTableTennisRoom model)
         {
             Event e = await Data.Events.Include(x => x.Rooms).GetAsync(model.EventId);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
@@ -145,6 +191,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                 SportType = await Data.SportTypes.GetByNameAsync("Table Tennis"),
                 GameSettings = new GameSettings
                 {
+                    MinScore = model.PointsPerGame,
                     IsGamePlayable = true,
                     MinGamesCount = model.MinGames,
                     IsPlayedForTime = false
@@ -153,7 +200,9 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             e.Rooms.Add(room);
             await Data.SaveChangesAsync();
 
-            return RedirectToAction("Edit", "Event", new { area = "Sport", id = model.EventId, target = "rooms" });
+            return RedirectToAction("Edit", "Event", new {area = "Sport", id = model.EventId, target = "rooms"});
         }
+
+        #endregion
     }
 }

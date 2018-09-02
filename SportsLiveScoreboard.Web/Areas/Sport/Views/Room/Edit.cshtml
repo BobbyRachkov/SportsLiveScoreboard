@@ -1,0 +1,14 @@
+﻿@model SportsLiveScoreboard.Models.ViewModels.Sport.Room.Edit.EditRoomViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="row">
+    <div class="col-2">
+        <a asp-controller="Event" asp-action="Edit" asp-route-id="@Model.EventId" asp-route-target="rooms" class="btn btn-outline-info btn-lg"><i class="fa fa-arrow-left"></i> Back to all rooms</a>
+    </div>   
+    <div class="col-12 col-md-10">
+        <h2>Event: @Model.EventName &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Room: @Model.RoomName</h2>
+    </div>
+</div>

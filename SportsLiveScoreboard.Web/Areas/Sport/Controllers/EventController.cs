@@ -22,14 +22,12 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
     [Authorize]
     public class EventController : SportController
     {
-        private readonly ISportsData _data;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRandomCodeProvider _randomCodeProvider;
 
         public EventController(ISportsData data, IDateTimeProvider dateTimeProvider,
-            IRandomCodeProvider randomCodeProvider):base(data)
+            IRandomCodeProvider randomCodeProvider) : base(data)
         {
-            _data = data;
             _dateTimeProvider = dateTimeProvider;
             _randomCodeProvider = randomCodeProvider;
         }
@@ -49,7 +47,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             }
 
 
-            var user = await _data.UserManager.GetUserAsync(User);
+            var user = await Data.UserManager.GetUserAsync(User);
             Event e = new Event
             {
                 Name = model.Name,
@@ -70,8 +68,8 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                     break;
             }
 
-            await _data.Events.AddAsync(e);
-            await _data.SaveChangesAsync();
+            await Data.Events.AddAsync(e);
+            await Data.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -80,8 +78,8 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         public async Task<IActionResult> All(string target)
         {
             AllViewModel vm = new AllViewModel {Target = target};
-            var user = await _data.UserManager.GetUserAsync(User);
-            vm.Events = _data
+            var user = await Data.UserManager.GetUserAsync(User);
+            vm.Events = Data
                 .Events
                 .Include(x => x.Rooms)
                 .OrderByDescending(x => x.DateCreated)
@@ -96,15 +94,17 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         public async Task<IActionResult> Edit(string id, string target)
         {
             ViewBag.Target = target;
-            Event e = await _data.Events.GetByIdWithIncludedRoomsAndMatches(id);
+            Event e = await Data.Events.GetByIdWithIncludedRoomsAndMatches(id);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
+
             EditViewModel vm = new EditViewModel
             {
                 EventId = e.Id,
@@ -119,7 +119,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                 {
                     EventId = id,
                     GameRooms = e.Rooms
-                        .Select(x =>new GameRoomViewModel
+                        .Select(x => new GameRoomViewModel
                         {
                             Id = x.Id,
                             Name = x.Name,
@@ -135,43 +135,47 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         [HttpPost]
         public IActionResult IsCodeAvailable(string code)
         {
-            if (_data.Events.ExistsWithCode(code))
+            if (Data.Events.ExistsWithCode(code))
             {
                 return Json("This code is taken.");
             }
+
             return Json(true);
         }
 
         [HttpPost]
         public IActionResult IsUsernamePresent(string username)
         {
-            if (!_data.Users.Any(x => x.UserName == username))
+            if (!Data.Users.Any(x => x.UserName == username))
             {
                 return Json("No profile with such username.");
             }
+
             return Json(true);
         }
 
         [HttpPost]
         public async Task<IActionResult> TransferOwnership(TransferOwnership model)
         {
-            Event e = await _data.Events.Include(x => x.Owner).GetAsync(model.EventId);
-            User user = await _data.UserManager.GetUserAsync(User);
+            Event e = await Data.Events.Include(x => x.Owner).GetAsync(model.EventId);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
-            User destinationUser = await _data.Users.GetFirstAsync(x => x.UserName == model.Username);
+
+            User destinationUser = await Data.Users.GetFirstAsync(x => x.UserName == model.Username);
             if (destinationUser == null)
             {
                 return NotFound();
             }
+
             e.Owner = destinationUser;
-            await _data.SaveChangesAsync();
+            await Data.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -183,15 +187,18 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
             {
                 return RedirectToAction(nameof(Edit), new {id = model.EventId});
             }
-            Event e = await _data.Events.GetAsync(model.EventId);
+
+            Event e = await Data.Events.GetAsync(model.EventId);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
+
             switch (model.ActivationType)
             {
                 case CheckboxResult.GivenCode:
@@ -201,49 +208,52 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
                     e.Code = GenerateUniqueCode(8);
                     break;
             }
-            await _data.SaveChangesAsync();
+
+            await Data.SaveChangesAsync();
             return RedirectToAction(nameof(Edit), new {id = model.EventId});
         }
 
         [HttpPost]
         public async Task<IActionResult> DeactivateEvent(string id)
         {
-            Event e = await _data.Events.GetAsync(id);
-            User user = await _data.UserManager.GetUserAsync(User);
+            Event e = await Data.Events.GetAsync(id);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
+
             e.Code = "";
-            await _data.SaveChangesAsync();
+            await Data.SaveChangesAsync();
             return RedirectToAction(nameof(Edit), new {id = id});
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete([FromForm] string id, [FromForm] string eventName)
         {
-            Event e = await _data.Events.GetAsync(id);
-            User user = await _data.UserManager.GetUserAsync(User);
+            Event e = await Data.Events.GetAsync(id);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
+
             if (string.IsNullOrWhiteSpace(eventName) ||
                 e.Name.ToLower().Replace(" ", "") != eventName.ToLower().Replace(" ", ""))
             {
                 return RedirectToAction(nameof(Edit), new {id = id});
             }
 
-            _data.Events.Delete(e);
-            await _data.SaveChangesAsync();
+            Data.Events.Delete(e);
+            await Data.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -251,23 +261,25 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         [HttpPost]
         public async Task<IActionResult> AddModerator(AddModerator model)
         {
-            Event e = await _data.Events.Include(x => x.Moderators).GetAsync(model.EventId);
-            User user = await _data.UserManager.GetUserAsync(User);
+            Event e = await Data.Events.Include(x => x.Moderators).GetAsync(model.EventId);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
-            User newModerator = await _data.Users.GetFirstAsync(x => x.UserName == model.Username);
+
+            User newModerator = await Data.Users.GetFirstAsync(x => x.UserName == model.Username);
             if (newModerator == null)
             {
                 return NotFound();
             }
+
             e.Moderators.Add(new UserEvents {Event = e, User = newModerator});
-            await _data.SaveChangesAsync();
+            await Data.SaveChangesAsync();
 
             return RedirectToAction("Edit", new {target = "moderation", id = model.EventId});
         }
@@ -275,18 +287,20 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveModerator(string eventId, string userId)
         {
-            Event e = await _data.Events.Include(x => x.Moderators).GetAsync(eventId);
+            Event e = await Data.Events.Include(x => x.Moderators).GetAsync(eventId);
             if (e == null)
             {
                 return NotFound();
             }
-            if (!IsOwnerOrAdministrator(e))
+
+            if (!await Data.ModerationManager.HasAdministrationRightsOverEvent(e, DbUser))
             {
                 return Unauthorized();
             }
+
             UserEvents relation = e.Moderators.FirstOrDefault(x => x.UserId == userId);
             e.Moderators.Remove(relation);
-            await _data.SaveChangesAsync();
+            await Data.SaveChangesAsync();
 
             return NoContent();
         }
@@ -294,31 +308,33 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         [HttpPost]
         public IActionResult CanAddModerator(string username, string eventId)
         {
-            Event e = _data.Events.GetByIdWithIncludedModerators(eventId);
+            Event e = Data.Events.GetByIdWithIncludedModerators(eventId);
             if (e == null)
             {
                 return NotFound();
             }
 
-            if (username==User.Identity.Name)
+            if (username == User.Identity.Name)
             {
                 return Json("You cannot add yourself as a moderator.");
             }
 
-            if (!_data.Users.Any(x => x.UserName == username))
+            if (!Data.Users.Any(x => x.UserName == username))
             {
                 return Json("No profile with such username.");
             }
+
             if (e.Moderators.Any(x => x.User.UserName == username))
             {
                 return Json("This person is already a moderator!");
             }
+
             return Json(true);
         }
 
         private ModeratorsViewModel GetModeratorsViewModel(string eventId)
         {
-            Event e = _data.Events.GetByIdWithIncludedModerators(eventId);
+            Event e = Data.Events.GetByIdWithIncludedModerators(eventId);
             return new ModeratorsViewModel
             {
                 EventId = eventId,
@@ -333,7 +349,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
 
         private void SetCustomCode(Event e, string code)
         {
-            if (string.IsNullOrWhiteSpace(code) || _data.Events.ExistsWithCode(code))
+            if (string.IsNullOrWhiteSpace(code) || Data.Events.ExistsWithCode(code))
             {
                 e.Code = GenerateUniqueCode(8);
             }
@@ -346,7 +362,7 @@ namespace SportsLiveScoreboard.Web.Areas.Sport.Controllers
         private string GenerateUniqueCode(int length)
         {
             string code;
-            while (_data.Events.ExistsWithCode(code = _randomCodeProvider.GenerateCode(length)))
+            while (Data.Events.ExistsWithCode(code = _randomCodeProvider.GenerateCode(length)))
             {
             }
 

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SportsLiveScoreboard.Services.Communication;
 using SportsLiveScoreboard.Services.Data;
+using SportsLiveScoreboard.Services.Data.Services;
 using SportsLiveScoreboard.Services.DateTimeProvider;
 using SportsLiveScoreboard.Services.RandomCodes;
 using SportsLiveScoreboard.Web.Extensions;
@@ -17,6 +18,7 @@ namespace SportsLiveScoreboard.Web
 
             services.AddTransient<IDateTimeProvider, SystemDateTimeProvider>();
             services.AddTransient<IRandomCodeProvider, DefaultCodeGenerator>();
+            
         }
     }
 }

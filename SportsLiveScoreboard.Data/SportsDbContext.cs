@@ -20,6 +20,8 @@ namespace SportsLiveScoreboard.Data
         public DbSet<GameRoom> GameRooms { get; set; }
         public DbSet<Score> Scores { get; set; }
         public DbSet<SportType> SportTypes { get; set; }
+        public DbSet<GameSettings> GameSettings { get; set; }
+        public DbSet<GameScoreInfo> GameScoreInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

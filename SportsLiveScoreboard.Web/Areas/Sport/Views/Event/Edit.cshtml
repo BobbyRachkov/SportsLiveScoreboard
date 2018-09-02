@@ -20,7 +20,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <ul class="nav nav-tabs height-45px">
+        <ul class="nav nav-tabs">@*height-45px*@
             <li class="nav-item">
                 <a class="nav-link @(ViewBag.Target == "code" || string.IsNullOrWhiteSpace(ViewBag.Target) ? "active" : "") text-primary" data-toggle="tab" href="#code">Code</a>
             </li>
@@ -85,6 +85,18 @@
                         $(row).remove();
                     });
                 });
+            $('.delete-first').on('click',
+                function() {
+                    let parent = $(this).parent();
+                    parent.children().forAll(x => $(x).addClass('d-none'));
+                    parent.children('.delete-cancel,.btn-remove-tr').forAll(x => $(x).removeClass('d-none'));
+                });
+            $('.delete-cancel').on('click',
+                function() {
+                    let parent = $(this).parent();
+                    parent.children().forAll(x => $(x).removeClass('d-none'));
+                    parent.children('.delete-cancel,.btn-remove-tr').forAll(x => $(x).addClass('d-none'));
+                });
         });
     </script>
 
@@ -118,9 +130,9 @@
             return $($($(element).parents('div.form-group')[0]).children('span.of-max-games'));
         }
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             let inputs = $('input.min-games');
-            for (let i=0;i<inputs.length;i++) {
+            for (let i = 0; i < inputs.length; i++) {
                 $(inputs[i]).trigger("change");
             }
         });
@@ -128,7 +140,7 @@
             function() {
                 let num = Number($(this).val());
                 let distSpan = getCorrespondingSpan(this);
-                distSpan.text(`of ${num*2-1} games`);
+                distSpan.text(`of ${num * 2 - 1} games`);
             });
     </script>
 }

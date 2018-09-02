@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SportsLiveScoreboard.Data.Models\SportsLiveScoreboard.Data.Models.csproj" />
+    <ProjectReference Include="..\SportsLiveScoreboard.Services.Data\SportsLiveScoreboard.Services.Data.csproj" />
+  </ItemGroup>
+
 </Project>

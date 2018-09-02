@@ -84,7 +84,7 @@
     </script>
 
     <script>
-        $('tr').on('click',
+        $('tbody>tr').on('click',
             function() {
                 let id = $(this).find('input').val();
                 window.location = `/Sport/Event/Edit?id=${id}`;

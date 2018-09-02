@@ -11,37 +11,40 @@ namespace SportsLiveScoreboard.Services.Data
 {
     public class SportsData : ISportsData
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly Lazy<IEventService> _eventService;
+        private readonly Lazy<IUserService> _userService;
+        private readonly Lazy<ISportTypeService> _sportTypeService;
+        private readonly Lazy<IGameRoomService> _gameRoomService;
+        private readonly Lazy<IMatchService> _matchService;
+        private readonly Lazy<IModerationManager> _moderationManager;
 
-        private Lazy<IEventService> eventService;
-        private Lazy<IUserService> userService;
-        private Lazy<ISportTypeService> sportTypeService;
-        private Lazy<IGameRoomService> gameRoomService;
 
         public SportsData(SportsDbContext dbContext, UserManager<User> userManager, RoleManager<Role> roleManager,
             SignInManager<User> signInManager)
         {
             Context = dbContext;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
+            UserManager = userManager;
+            RoleManager = roleManager;
+            SignInManager = signInManager;
 
-            eventService = eventService.InitLazy(new EventService(this));
-            userService = userService.InitLazy(new UserService(this));
-            sportTypeService = sportTypeService.InitLazy(new SportTypeService(this));
-            gameRoomService = gameRoomService.InitLazy(new GameRoomService(this));
+            _eventService = _eventService.InitLazy(new EventService(this));
+            _userService = _userService.InitLazy(new UserService(this));
+            _sportTypeService = _sportTypeService.InitLazy(new SportTypeService(this));
+            _gameRoomService = _gameRoomService.InitLazy(new GameRoomService(this));
+            _matchService = _matchService.InitLazy(new MatchService(this));
+            _moderationManager = _moderationManager.InitLazy(new ModerationManager(this));
         }
-        internal SportsDbContext Context { get; }
 
-        public UserManager<User> UserManager => _userManager;
-        public RoleManager<Role> RoleManager => _roleManager;
-        public SignInManager<User> SignInManager => _signInManager;
-        public IEventService Events => eventService.Value;
-        public IUserService Users => userService.Value;
-        public ISportTypeService SportTypes => sportTypeService.Value;
-        public IGameRoomService GameRooms => gameRoomService.Value;
+        internal SportsDbContext Context { get; }
+        public UserManager<User> UserManager { get; }
+        public RoleManager<Role> RoleManager { get; }
+        public SignInManager<User> SignInManager { get; }
+        public IModerationManager ModerationManager => _moderationManager.Value;
+        public IEventService Events => _eventService.Value;
+        public IUserService Users => _userService.Value;
+        public ISportTypeService SportTypes => _sportTypeService.Value;
+        public IGameRoomService GameRooms => _gameRoomService.Value;
+        public IMatchService Matches => _matchService.Value;
 
 
         public void SaveChanges()
